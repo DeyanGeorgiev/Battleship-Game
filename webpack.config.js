@@ -1,11 +1,8 @@
 var path = require ('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 
-var extractPlugin= new ExtractTextPlugin({
-    filename:'main.css'
-});
 
 module.exports={
     entry:'./src/js/app.js',
@@ -27,9 +24,12 @@ module.exports={
             },
             {
                 test: /\.scss$/,
-                use:extractPlugin.extract({
-                    use:['css-loader','sass-loader']
-                })
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          'css-loader','sass-loader'
+        ],
             },
             {
                 test:/\.html$/,
@@ -51,7 +51,13 @@ module.exports={
         ]
     },
     plugins: [
-        extractPlugin,
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // all options are optional
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+          }),
         new HtmlWebpackPlugin({
             template:'src/index.html'
         }),
