@@ -21,5 +21,7 @@ export default class View {
 		for (let index = 0; index < location.length; index++) {
 			getElementId(location[index]).innerHTML = "X";
 		};
+
+		getElementId('guessInput').disabled = true;
 	}
 };
